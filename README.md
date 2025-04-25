@@ -64,4 +64,4 @@ $_SESSION['flag'] = "kcsc";
 ```
 Kết hợp 2 điều kiện trên thì payload hoàn chỉnh của chúng ta sẽ là `?input=%0A&_SESSION[flag]=kcsc`
 Truy cập vào url của đề bài và truyền payload vào thôi 
-![atl](Images/Flag.png) 
+![atl](Images/flag.png) 
