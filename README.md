@@ -50,13 +50,19 @@ Nhưng ***$input*** luôn được nối "kcsc" vào cuối → Regex luôn matc
 
 #### Ý tưởng khai thác  
 
-Làm cho ***$input*** chứa "kcsc" nhưng regex không match → bypass được điều kiện if 
-Cùng phân tích đoạn kiểm tra regex này để tìm cách bypass nào  
-`preg_match("/^.*kcsc.*$/",$input)`
-Trong regex trên chúng ta thấy trước và sau kcsc đều có ký tự `.` (dot) . Đây là một meta đơn giản nó biểu diễn bất kỳ ký tự nào ngoài trừ ký tự `return \r` hoặc `newline \n` . Hehe đọc đến đây là có ý tưởng khai thác rồi. Bây giờ chỉ cần truyền tham số newline vào biến ***$input*** . Vì `.` (dot) không match được ký tự \n, nên phần đầu (^.*) sẽ match chuỗi rỗng (trước newline), sau đó đến kcsc, nó sẽ bị tách dòng, regex không nối liền được → fail.  
+Làm cho ***$input*** chứa "kcsc" nhưng regex không match → bypass được điều kiện if  
+
+Cùng phân tích đoạn kiểm tra regex này để tìm cách bypass nào `preg_match("/^.*kcsc.*$/",$input)`  
+
+Trong regex trên chúng ta thấy trước và sau kcsc đều có ký tự `.` (dot). Đây là một meta đơn giản nó biểu diễn bất kỳ ký tự nào ngoài trừ ký tự `return \r` hoặc `newline \n` . Hehe đọc đến đây là có ý tưởng khai thác rồi.  
+ Bây giờ chỉ cần truyền tham số newline vào biến ***$input*** . Vì `.` (dot) không match được ký tự \n, nên phần đầu (^.*) sẽ match chuỗi rỗng (trước newline), sau đó đến kcsc, nó sẽ bị tách dòng, regex không nối liền được → fail.  
+
 Ký tự newline trong url được mã hoá thành **%0A** Giả sử ta truyền vào `?input=%0A` thì server sẽ hiểu `$input = "\n" . "kcsc";`  
+
 Regex `/^.*kcsc.*$/` sẽ không match do có newline ngắt giữa dòng.  
+
 Thế là xong được điều kiện đầu tiên.  
+ 
 Tiếp theo chúng ta cần đảm bảo ***$_SESSION['flag'] == "kcsc"*** mà xem trên code đâu thấy chổ nào có biến _SESSION đâu :v . Ngó xuống cuối thấy có đoạn này `extract($_GET);` Nó sẽ tạo ra các biến PHP từ các tham số trong URL (query string). Ví dụ truyền vào URL như sau: `?input=test&_SESSION[flag]=kcsc` thì server sẽ xử lý 
 ```php 
 $input = "test";
